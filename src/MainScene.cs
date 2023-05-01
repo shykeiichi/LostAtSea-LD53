@@ -171,25 +171,25 @@ class MainScene : Scene
             // Draw.Text(i.Item2, "Pixuf.ttf", i.Item1, 8, new(255, 255, 255, 255), 5000);
             if(Helpers.PointDistance(Camera.Offset, i.Item2) < WindowSize.X + 10)
             {
-                // new Text("Pixuf.ttf", i.Item1)
-                //     .Position(i.Item2)
-                //     .Size(8)
-                //     .Color(new Vector4(255, 255, 255, 255))
-                //     .Depth(5000)
-                //     .RenderToTexture()
-                //     .Destroy(true)
-                //     .Depth(5000)
-                //     .GetRect(out Vector4 rec)
-                //     .Render();
+                new Text("Pixuf.ttf", i.Item1)
+                    .Position(i.Item2)
+                    .Size(8)
+                    .Color(new Vector4(255, 255, 255, 255))
+                    .Depth(5000)
+                    .RenderToTexture()
+                    .Destroy(true)
+                    .Depth(5000)
+                    .GetRect(out Vector4 rec)
+                    .Render();
 
                 if(idx == selectedCity)
                 {
-                    // new Texture("Images/Marker.png")
-                    //     .Center(Center.BottomMiddle)
-                    //     .Position(Vector2.Add(i.Item2, new (rec.Z / 2, -3)))
-                    //     .Destroy(false)
-                    //     .Depth(4998)
-                    //     .Render();
+                    new Texture("Images/Marker.png")
+                        .Center(Center.BottomMiddle)
+                        .Position(Vector2.Add(i.Item2, new (rec.Z / 2, -3)))
+                        .Destroy(false)
+                        .Depth(4998)
+                        .Render();
                 }
             }
         }
