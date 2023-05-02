@@ -15,7 +15,6 @@ class MainScene : Scene
     public ulong StartTimer = 0;
 
     public Entity Boat;
-    bool ShowOpenMap = true;
 
     public MainScene(int width, int height, string id) : base(width, height, id)
     {
@@ -31,7 +30,6 @@ class MainScene : Scene
         Cities = new();
         selectedCity = null;
         startCity = 0;
-        ShowOpenMap = true;
 
         Boat = new Entity(this).Add(new BoatController());
         Camera.SetTarget(Boat);
@@ -115,6 +113,8 @@ class MainScene : Scene
                     next = true;
                 }
             }
+
+            SceneHandler.Get<HUD>().ShowOpenMap = true;
         }
 
         Debug.RegisterCommand("getislands", (args) => {
@@ -197,34 +197,6 @@ class MainScene : Scene
             }
         }
 
-        if(Helpers.PointDistance(Boat.Get<Transform>().Position, Cities[selectedCity.Value].Item2) < 50)
-        {
-            string value = "Press E to deliver package";
-            Draw.Box(new(2 + Camera.Offset.X, WindowSize.Y - 10 + Camera.Offset.Y, value.Length * 4 + 4, 8), new(255, 255, 255, 255), 4999);
-            LD.DrawSmallFont(new(4 + Camera.Offset.X, WindowSize.Y - 8 + Camera.Offset.Y), value);
-
-            if(Keyboard.Pressed(Key.E))
-            {
-                Random rand = new();
-                Boat.Get<BoatController>().Gold += 100;
-                var newCity = rand.Next(Cities.Count);
-
-                Debug.Log("Distance " + Helpers.PointDistance(Cities[selectedCity.Value].Item2, Cities[newCity].Item2));
-                Debug.Log("Took " + (SDL_GetTicks64() - StartTimer));
-                
-                StartTimer = SDL_GetTicks64();
-                selectedCity = newCity;
-
-                RegisterEntity(new Entity(this).Add(new DeliveryCompleted()));
-            }
-        }
-        else
-        {
-            string value = $"Deliver your package to${Cities[selectedCity.Value].Item1}";
-            Draw.Box(new(2 + Camera.Offset.X, WindowSize.Y - 10 + Camera.Offset.Y, value.Length * 4 + 4, 8), new(235, 214, 190, 255), 4999);
-            LD.DrawSmallFont(new(4 + Camera.Offset.X, WindowSize.Y - 8 + Camera.Offset.Y), value);
-        }
-
         // new Texture("Images/Arrow.png")
         //     .Angle(Helpers.PointDirection(Boat.Get<Transform>().Position, Cities[selectedCity.Value].Item2))
         //     .Position(Vector2.Add(Boat.Get<Transform>().Position,  new(20, 0)))
@@ -246,17 +218,65 @@ class MainScene : Scene
         //     .Destroy(true)
         //     .Center(Center.Middle)
         //     .Render();
+    }
+}
+
+class HUD : Scene
+{
+    public bool ShowOpenMap = true;
+    MainScene main;
+
+    public HUD(int width, int height, string id) : base(width, height, id)
+    {
+    }
+
+    public override void Awake()
+    {
+        main = SceneHandler.Get<MainScene>();
+        SetClearColor(0, 0, 0, 0);
+        SetCaptureMouse(false);
+    }
+
+    public override void Render()
+    {
+        if(Helpers.PointDistance(main.Boat.Get<Transform>().Position, main.Cities[main.selectedCity.Value].Item2) < 50)
+        {
+            string value = "Press E to deliver package";
+            Draw.Box(new(2, WindowSize.Y - 10, value.Length * 4 + 4, 8), new(255, 255, 255, 255), 4999);
+            LD.DrawSmallFont(new(4, WindowSize.Y - 8), value);
+
+            if(Keyboard.Pressed(Key.E))
+            {
+                Random rand = new();
+                main.Boat.Get<BoatController>().Gold += 100;
+                var newCity = rand.Next(main.Cities.Count);
+
+                Debug.Log("Distance " + Helpers.PointDistance(main.Cities[main.selectedCity.Value].Item2, main.Cities[newCity].Item2));
+                Debug.Log("Took " + (SDL_GetTicks64() - main.StartTimer));
+                
+                main.StartTimer = SDL_GetTicks64();
+                main.selectedCity = newCity;
+
+                RegisterEntity(new Entity(this).Add(new DeliveryCompleted()));
+            }
+        }
+        else
+        {
+            string value = $"Deliver your package to${main.Cities[main.selectedCity.Value].Item1}";
+            Draw.Box(new(2, WindowSize.Y - 10, value.Length * 4 + 4, 8), new(235, 214, 190, 255), 4999);
+            LD.DrawSmallFont(new(4, WindowSize.Y - 8), value);
+        }
 
         if(ShowOpenMap)
-            Draw.Text(new(1 + Camera.Offset.X, 1 + Camera.Offset.Y), "Pixuf.ttf", "Press (M) To Open Map", 8, new(255, 255, 255, 255), 5000);
+            Draw.Text(new(1, 1), "Pixuf.ttf", "Press (M) To Open Map", 8, new(255, 255, 255, 255), 5000);
         if(Keyboard.Pressed(Key.M))
         {
             ShowOpenMap = false;
             // SceneHandler.Unload("Main");
             SceneHandler.Load("Map");
-        }
+        }   
 
-        new Text("Pixuf.ttf", $"{Boat.Get<BoatController>().Gold}")
+        new Text("Pixuf.ttf", $"{SceneHandler.Get<MainScene>().Boat.Get<BoatController>().Gold}")
             .Color(new Vector4(255, 255, 255, 255))
             .Size(8)
             .RenderToTexture()
@@ -268,7 +288,5 @@ class MainScene : Scene
         new Texture("Images/Gold.png")
             .Position(Vector2.Add(new(WindowSize.X - rect.Z - 8, 2), Camera.Offset))
             .Render();
-            
     }
 }
-

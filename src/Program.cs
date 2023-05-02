@@ -11,6 +11,10 @@ class Program
             .SetAlwaysAtBack(true)
         );
 
+        SceneHandler.Register(new HUD(280, 157, "HUD")
+            .SetRelativeWindowSize(0, 0, 1, 1)
+        );
+
         SceneHandler.Register(new Map(280, 157, "Map")
             .SetRelativeWindowSize(0, 0, 1f, 1f)
         );

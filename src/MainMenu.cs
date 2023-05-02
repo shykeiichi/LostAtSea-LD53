@@ -34,6 +34,10 @@ class MainMenu : Scene
             SceneHandler.Get("Main").Entities.Clear();
             SceneHandler.Get("Main").AwakeCall();
             SceneHandler.Load("Main");
+
+            SceneHandler.Get("HUD").Entities.Clear();
+            SceneHandler.Get("HUD").AwakeCall();
+            SceneHandler.Load("HUD");
         });
 
         Draw.Rectangle(new(0, 0, WindowSize.X, WindowSize.Y), new(235, 214, 190, 255));      
