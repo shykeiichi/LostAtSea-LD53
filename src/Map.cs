@@ -5,6 +5,7 @@ class Map : Scene
     MainScene main;
 
     Vector2 MapOffset = new();
+    Vector2 TempMapOffset = new();
 
     Vector2 MouseStart = new();
 
@@ -28,15 +29,22 @@ class Map : Scene
 
     public override void Update(double dt)
     {
-        // if(Mouse.Pressed(MB.Left))
-        // {
-        //     MouseStart = new(Mouse.LocalPosition.X, Mouse.LocalPosition.Y);
-        // }
+        if(Mouse.Pressed(MB.Left))
+        {
+            MouseStart = new(Mouse.Position.X, Mouse.Position.Y);
+        }
 
-        // if(Mouse.Down(MB.Left))
-        // {
-        //     MapOffset = MouseStart - Mouse.LocalPosition;
-        // }
+        if(Mouse.Down(MB.Left))
+        {
+            TempMapOffset = (MouseStart + MapOffset) - (Mouse.Position);
+        } else {
+            TempMapOffset = MapOffset;
+        }
+
+        if(Mouse.Released(MB.Left))
+        {
+            MapOffset = (MouseStart + MapOffset) - (Mouse.Position);
+        }
 
         if(Keyboard.Down(Key.W))
         {
@@ -80,6 +88,8 @@ class Map : Scene
         //     }
         // }
 
+        // Console.WriteLine($"{Mouse.Released(MB.Left)} {Mouse.Down(MB.Left)}");
+   
         Draw.Box(new(2, 2, 35, 40), new(235, 214, 190, 255), 10000);
 
         Draw.Box(new(4, 4, 4, 4), new(179, 165, 85, 255), 10000);
@@ -111,7 +121,7 @@ class Map : Scene
                 //     .Render();
 
                 new Rectangle(
-                    new((i.Key.X * 16 - main.Map[j].Item2.X) / zoom - MapOffset.X, (i.Key.Y * 16 - main.Map[j].Item2.Y) / zoom - MapOffset.Y,
+                    new((i.Key.X * 16 - main.Map[j].Item2.X) / zoom - TempMapOffset.X, (i.Key.Y * 16 - main.Map[j].Item2.Y) / zoom - TempMapOffset.Y,
                         16 / zoom + 2,
                         16 / zoom + 2)
                 )
@@ -134,13 +144,13 @@ class Map : Scene
             
             if(zoom < 12)
             {
-                LD.DrawSmallFont((i.Item2 / zoom) - MapOffset, $"{i.Item1}");
+                LD.DrawSmallFont((i.Item2 / zoom) - TempMapOffset, $"{i.Item1}");
             }
 
             bool selected = main.startCity == idx;
 
             new Rectangle(
-                new((i.Item2 / zoom) - MapOffset,
+                new((i.Item2 / zoom) - TempMapOffset,
                     16 / zoom + 2 + (selected ? 2 : 0),
                     16 / zoom + 2 + (selected ? 2 : 0))
             )
@@ -157,7 +167,7 @@ class Map : Scene
             {
                 new Texture("Images/Marker.png")
                     .Center(Center.BottomMiddle)
-                    .Position((i.Item2 / zoom) - MapOffset)
+                    .Position((i.Item2 / zoom) - TempMapOffset)
                     .Destroy(false)
                     .Depth(4998)
                     .Render();
