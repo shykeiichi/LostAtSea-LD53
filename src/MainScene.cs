@@ -47,15 +47,18 @@ class MainScene : Scene
             {
                 for(var j = 0; j < 16; j++)
                 {
-                    if(jsonMap[i][j].TileID != null)
+                    if(jsonMap != null)
                     {
-                        if(!Tiles.ContainsKey(jsonMap[i][j].TileID))
+                        if(jsonMap[i][j].TileID != "")
                         {
-                            Tiles.Add(jsonMap[i][j].TileID, new LoadTile() {
-                                tex = new Texture(jsonMap[i][j].TileID)
-                            });
+                            if(!Tiles.ContainsKey(jsonMap[i][j].TileID))
+                            {
+                                Tiles.Add(jsonMap[i][j].TileID, new LoadTile() {
+                                    tex = new Texture(jsonMap[i][j].TileID)
+                                });
+                            }
+                            Islands[Islands.Count - 1].Add(new(i, j), jsonMap[i][j]);
                         }
-                        Islands[Islands.Count - 1].Add(new(i, j), jsonMap[i][j]);
                     }
                 }
             }

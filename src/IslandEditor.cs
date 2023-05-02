@@ -11,7 +11,7 @@ namespace LD53;
 
 class Tile
 {
-    public string? TileID;
+    public string TileID = "";
     public bool IsCity = false;
 }
 
@@ -52,7 +52,7 @@ class Editor : Scene
 
                 if(Tilemap.ContainsKey(new(w, h)))
                 {
-                    if(Tilemap[new(w, h)].TileID != null)
+                    if(Tilemap[new(w, h)].TileID != "")
                     {
                         inspector.Tiles[Tilemap[new(w, h)].TileID].tex
                             .Size(64, 64)
@@ -100,7 +100,7 @@ class Editor : Scene
                         };
                     } else {
                         Tilemap.Add(new(w, h), new() {
-                            TileID = null,
+                            TileID = "",
                             IsCity = true
                         });
                     }
@@ -267,19 +267,22 @@ class EditorInspector : Scene
                     .Button("Load", () => {
                         var jsonMap = JsonConvert.DeserializeObject<List<List<Tile>>>(File.ReadAllText(LoadPath));
 
-                        for(var i = 0; i < 16; i++)
+                        if(jsonMap != null)
                         {
-                            for(var j = 0; j < 16; j++)
+                            for(var i = 0; i < 16; i++)
                             {
-                                if(jsonMap[i][j].TileID != null)
+                                for(var j = 0; j < 16; j++)
                                 {
-                                    if(!Tiles.ContainsKey(jsonMap[i][j].TileID))
+                                    if(jsonMap[i][j].TileID != "")
                                     {
-                                        Tiles.Add(jsonMap[i][j].TileID, new LoadTile() {
-                                            tex = new Texture(jsonMap[i][j].TileID)
-                                        });
+                                        if(!Tiles.ContainsKey(jsonMap[i][j].TileID))
+                                        {
+                                            Tiles.Add(jsonMap[i][j].TileID, new LoadTile() {
+                                                tex = new Texture(jsonMap[i][j].TileID)
+                                            });
+                                        }
+                                        SceneHandler.Get<Editor>().Tilemap.Add(new(i, j), jsonMap[i][j]);
                                     }
-                                    SceneHandler.Get<Editor>().Tilemap.Add(new(i, j), jsonMap[i][j]);
                                 }
                             }
                         }
