@@ -11,6 +11,17 @@ class Map : Scene
 
     float zoom = 8;
 
+    int BMPressed = 0;
+    int BESCPressed = 0;
+
+    int BPanPressed = 0;
+    int BScrollPressed = 0;
+
+    Texture BPanOff = new("Images/HUD/ButtonPan0.png");
+    Texture BPanOn = new("Images/HUD/ButtonPan1.png");
+
+    Texture BScroll = new("Images/HUD/ButtonScroll.png");
+
     public Map(int width, int height, string id) : base(width, height, id)
     {
     }
@@ -34,16 +45,16 @@ class Map : Scene
             MouseStart = new(Mouse.Position.X, Mouse.Position.Y);
         }
 
+        if(Mouse.Released(MB.Left))
+        {
+            MapOffset = (MouseStart + MapOffset) - (Mouse.Position);
+        }
+
         if(Mouse.Down(MB.Left))
         {
             TempMapOffset = (MouseStart + MapOffset) - (Mouse.Position);
         } else {
             TempMapOffset = MapOffset;
-        }
-
-        if(Mouse.Released(MB.Left))
-        {
-            MapOffset = (MouseStart + MapOffset) - (Mouse.Position);
         }
 
         if(Keyboard.Down(Key.W))
@@ -64,6 +75,16 @@ class Map : Scene
             MapOffset.X += 400f * (float)dt;
         }
         
+        if(Keyboard.Pressed(Key.M))
+        {
+            BMPressed++;
+        }
+
+        if(Keyboard.Pressed(Key.ESCAPE))
+        {
+            BESCPressed++;
+        }
+
         if(Keyboard.Pressed(Key.M) || Keyboard.Pressed(Key.ESCAPE))
         {
             // SceneHandler.Load("Main");
@@ -189,6 +210,85 @@ class Map : Scene
             MapOffset = new(-140, -78);
         });
 
-        Draw.Rectangle(new(0, 0, WindowSize.X, WindowSize.Y), new(235, 214, 190, 255));      
+        Draw.Rectangle(new(0, 0, WindowSize.X, WindowSize.Y), new(235, 214, 190, 255));     
+
+        if(Mouse.Pressed(MB.Left))
+        {
+            BPanPressed++;
+        }
+
+        if(Mouse.Pressed(MB.ScrollUp) || Mouse.Pressed(MB.ScrollDown))
+        {
+            BScrollPressed++;
+        }
+
+        if(BScrollPressed < 12)
+        {
+            BScroll.Position(new(WindowSize.X / 2, WindowSize.Y - 3)).Center(Center.BottomMiddle).Depth(30000).Render();
+
+            new Text("Pixuf.ttf", "Scroll To Zoom")
+                .Size(8)
+                .Color(new Vector4(0, 0, 0, 255))
+                .RenderToTexture()
+                .Destroy(true)
+                .Center(Center.BottomRight)
+                .Position(new(WindowSize.X / 2 - 7, WindowSize.Y - 4))
+                .Depth(30000)
+                .GetRect(out Vector4 rect)
+                .Render(); 
+
+            Draw.Box(Vector4.Add(rect, new(-2, -2, 3, 3)), new(235, 214, 190, 255), 29999);     
+        }
+        else if(BPanPressed < 4)
+        {
+            if(!Mouse.Down(MB.Left))
+                BPanOn.Position(new(WindowSize.X / 2, WindowSize.Y - 3)).Center(Center.BottomMiddle).Depth(30000).Render();
+            else
+                BPanOff.Position(new(WindowSize.X / 2, WindowSize.Y - 3)).Center(Center.BottomMiddle).Depth(30000).Render();
+
+            new Text("Pixuf.ttf", "Pan Around")
+                .Size(8)
+                .Color(new Vector4(0, 0, 0, 255))
+                .RenderToTexture()
+                .Destroy(true)
+                .Center(Center.BottomRight)
+                .Position(new(WindowSize.X / 2 - 7, WindowSize.Y - 4))
+                .Depth(30000)
+                .GetRect(out Vector4 rect)
+                .Render(); 
+
+            Draw.Box(Vector4.Add(rect, new(-2, -2, 3, 3)), new(235, 214, 190, 255), 29999);     
+        } 
+        else if((BMPressed < 1) && (BESCPressed < 1))
+        {
+            SceneHandler.Get<HUD>().BMOn.Position(new(WindowSize.X / 2, WindowSize.Y - 3)).Center(Center.BottomMiddle).Depth(30000).Render();
+
+            SceneHandler.Get<HUD>().BESCOn.Position(new(WindowSize.X / 2 + 18, WindowSize.Y - 3)).Center(Center.BottomLeft).Depth(30000).Render();
+
+            new Text("Pixuf.ttf", "Close Map")
+                .Size(8)
+                .Color(new Vector4(0, 0, 0, 255))
+                .RenderToTexture()
+                .Destroy(true)
+                .Center(Center.BottomRight)
+                .Position(new(WindowSize.X / 2 - 7, WindowSize.Y - 4))
+                .Depth(30000)
+                .GetRect(out Vector4 rect1)
+                .Render(); 
+
+            new Text("Pixuf.ttf", "or")
+                .Size(8)
+                .Color(new Vector4(0, 0, 0, 255))
+                .RenderToTexture()
+                .Destroy(true)
+                .Center(Center.BottomLeft)
+                .Position(new(WindowSize.X / 2 + 9, WindowSize.Y - 4))
+                .Depth(30000)
+                .GetRect(out Vector4 rect2)
+                .Render(); 
+
+            Draw.Box(Vector4.Add(rect1, new(-2, -2, 3, 3)), new(235, 214, 190, 255), 29999);  
+            Draw.Box(Vector4.Add(rect2, new(-2, -2, 3, 3)), new(235, 214, 190, 255), 29999);        
+        }
     }
 }

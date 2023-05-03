@@ -4,7 +4,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        Game.Initialize("Delivery LD53", 1920, 1080);
+        Game.Initialize("Delivery LD53", 1280, 720);
 
         SceneHandler.Register(new MainScene(280, 157, "Main")
             .SetRelativeWindowSize(0, 0, 1, 1)

@@ -113,8 +113,6 @@ class MainScene : Scene
                     next = true;
                 }
             }
-
-            SceneHandler.Get<HUD>().ShowOpenMap = true;
         }
 
         Debug.RegisterCommand("getislands", (args) => {
@@ -196,35 +194,34 @@ class MainScene : Scene
                 }
             }
         }
-
-        // new Texture("Images/Arrow.png")
-        //     .Angle(Helpers.PointDirection(Boat.Get<Transform>().Position, Cities[selectedCity.Value].Item2))
-        //     .Position(Vector2.Add(Boat.Get<Transform>().Position,  new(20, 0)))
-        //     .Center(Center.Middle)
-        //     .Render();
-
-        // new Rectangle(new(Mouse.Position, 20, 20))
-        //     .Color(new(231, 130, 132, 255))
-        //     .Fill(true)
-        //     .RenderToTexture()
-        //     .Destroy(true)
-        //     .Center(Center.Middle)
-        //     .Render();
-
-        // new Circle(Mouse.Position, 20)
-        //     .Color(new(231, 130, 132, 255))
-        //     .Fill(true)
-        //     .RenderToTexture()
-        //     .Destroy(true)
-        //     .Center(Center.Middle)
-        //     .Render();
     }
 }
 
 class HUD : Scene
 {
-    public bool ShowOpenMap = true;
     MainScene main;
+
+    Texture BWOff = new("Images/HUD/ButtonW0.png");
+    Texture BWOn = new("Images/HUD/ButtonW1.png");
+
+    Texture BAOff = new("Images/HUD/ButtonA0.png");
+    Texture BAOn = new("Images/HUD/ButtonA1.png");
+
+    Texture BDOff = new("Images/HUD/ButtonD0.png");
+    Texture BDOn = new("Images/HUD/ButtonD1.png");
+
+    Texture BEOn = new("Images/HUD/ButtonE1.png");
+
+    public Texture BMOff = new("Images/HUD/ButtonM0.png");
+    public Texture BMOn = new("Images/HUD/ButtonM1.png");
+
+    public Texture BESCOff = new("Images/HUD/ButtonESC0.png");
+    public Texture BESCOn = new("Images/HUD/ButtonESC1.png");
+
+    int BMPressed = 0;
+    int BWPressed = 0;
+    int BAPressed = 0;
+    int BDPressed = 0;
 
     public HUD(int width, int height, string id) : base(width, height, id)
     {
@@ -241,9 +238,17 @@ class HUD : Scene
     {
         if(Helpers.PointDistance(main.Boat.Get<Transform>().Position, main.Cities[main.selectedCity.Value].Item2) < 50)
         {
-            string value = "Press E to deliver package";
-            Draw.Box(new(2, WindowSize.Y - 10, value.Length * 4 + 4, 8), new(255, 255, 255, 255), 4999);
-            LD.DrawSmallFont(new(4, WindowSize.Y - 8), value);
+            BEOn.Position(new(WindowSize.X / 2, WindowSize.Y - 16)).Center(Center.BottomMiddle).Depth(30000).Render();
+
+            new Text("Pixuf.ttf", "Deliver Package")
+                .Size(8)
+                .Color(new Vector4(255, 255, 255, 255))
+                .RenderToTexture()
+                .Destroy(true)
+                .Center(Center.BottomRight)
+                .Depth(30000)
+                .Position(new(WindowSize.X / 2 - 6, WindowSize.Y - 18))
+                .Render();
 
             if(Keyboard.Pressed(Key.E))
             {
@@ -260,19 +265,13 @@ class HUD : Scene
                 RegisterEntity(new Entity(this).Add(new DeliveryCompleted()));
             }
         }
-        else
-        {
-            string value = $"Deliver your package to${main.Cities[main.selectedCity.Value].Item1}";
-            Draw.Box(new(2, WindowSize.Y - 10, value.Length * 4 + 4, 8), new(235, 214, 190, 255), 4999);
-            LD.DrawSmallFont(new(4, WindowSize.Y - 8), value);
-        }
+        
+        string value = $"Deliver your package to${main.Cities[main.selectedCity.Value].Item1}";
+        Draw.Box(new(2, WindowSize.Y - 10, value.Length * 4 + 4, 8), new(235, 214, 190, 255), 4999);
+        LD.DrawSmallFont(new(4, WindowSize.Y - 8), value);
 
-        if(ShowOpenMap)
-            Draw.Text(new(1, 1), "Pixuf.ttf", "Press (M) To Open Map", 8, new(255, 255, 255, 255), 5000);
         if(Keyboard.Pressed(Key.M))
         {
-            ShowOpenMap = false;
-            // SceneHandler.Unload("Main");
             SceneHandler.Load("Map");
         }   
 
@@ -288,5 +287,81 @@ class HUD : Scene
         new Texture("Images/Gold.png")
             .Position(Vector2.Add(new(WindowSize.X - rect.Z - 8, 2), Camera.Offset))
             .Render();
+        
+        if(GlobalKeyboard.Pressed(Key.W))
+            BWPressed++;
+
+        if(GlobalKeyboard.Pressed(Key.A))
+            BAPressed++;
+
+        if(GlobalKeyboard.Pressed(Key.D))
+            BDPressed++;
+
+        if(GlobalKeyboard.Pressed(Key.M))
+            BMPressed++;
+
+        if((BWPressed < 3) || (BAPressed < 3) || (BDPressed < 3))
+        {    
+            if(!GlobalKeyboard.Down(Key.W))
+                BWOn.Position(new(WindowSize.X / 2, WindowSize.Y - 32)).Center(Center.BottomMiddle).Depth(30000).Render();
+            else
+                BWOff.Position(new(WindowSize.X / 2, WindowSize.Y - 32)).Center(Center.BottomMiddle).Depth(30000).Render();
+
+            new Text("Pixuf.ttf", "Forward")
+                .Size(8)
+                .Color(new Vector4(255, 255, 255, 255))
+                .RenderToTexture()
+                .Destroy(true)
+                .Center(Center.BottomRight)
+                .Position(new(WindowSize.X / 2 - 6, WindowSize.Y - 34))
+                .Depth(30000)
+                .Render();
+
+            if(!GlobalKeyboard.Down(Key.A))
+                BAOn.Position(new(WindowSize.X / 2 - 13, WindowSize.Y - 16)).Center(Center.BottomMiddle).Depth(30000).Render();
+            else
+                BAOff.Position(new(WindowSize.X / 2 - 13, WindowSize.Y - 16)).Center(Center.BottomMiddle).Depth(30000).Render();
+
+            new Text("Pixuf.ttf", "Turn Left")
+                .Size(8)
+                .Color(new Vector4(255, 255, 255, 255))
+                .RenderToTexture()
+                .Destroy(true)
+                .Center(Center.BottomRight)
+                .Position(new(WindowSize.X / 2 - 19, WindowSize.Y - 18))
+                .Depth(30000)
+                .Render();
+
+            if(!GlobalKeyboard.Down(Key.D))
+                BDOn.Position(new(WindowSize.X / 2 + 13, WindowSize.Y - 16)).Center(Center.BottomMiddle).Depth(30000).Render();
+            else
+                BDOff.Position(new(WindowSize.X / 2 + 13, WindowSize.Y - 16)).Center(Center.BottomMiddle).Depth(30000).Render();
+
+            new Text("Pixuf.ttf", "Turn Right")
+                .Size(8)
+                .Color(new Vector4(255, 255, 255, 255))
+                .RenderToTexture()
+                .Destroy(true)
+                .Center(Center.BottomLeft)
+                .Position(new(WindowSize.X / 2 + 20, WindowSize.Y - 18))
+                .Depth(30000)
+                .Render();
+
+        } else if(BMPressed < 1) {
+            if(!GlobalKeyboard.Down(Key.M))
+                BMOn.Position(new(WindowSize.X / 2, WindowSize.Y - 16)).Center(Center.BottomMiddle).Depth(30000).Render();
+            else
+                BMOff.Position(new(WindowSize.X / 2, WindowSize.Y - 16)).Center(Center.BottomMiddle).Depth(30000).Render();
+
+            new Text("Pixuf.ttf", "Open Map")
+                .Size(8)
+                .Color(new Vector4(255, 255, 255, 255))
+                .RenderToTexture()
+                .Destroy(true)
+                .Center(Center.BottomRight)
+                .Depth(30000)
+                .Position(new(WindowSize.X / 2 - 6, WindowSize.Y - 18))
+                .Render();
+        }
     }
 }
