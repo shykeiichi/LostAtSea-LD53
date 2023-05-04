@@ -40,6 +40,6 @@ class MainMenu : Scene
             SceneHandler.Load("HUD");
         });
 
-        Draw.Rectangle(new(0, 0, WindowSize.X, WindowSize.Y), new(235, 214, 190, 255));      
+        Draw.Rectangle(new(0, 0, WindowSize.X, WindowSize.Y), new(235, 214, 190, 255));
     }
 }

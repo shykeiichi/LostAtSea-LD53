@@ -1,6 +1,6 @@
 namespace LD53;
 
-class BoatController : Component
+class PlayerController : Component
 {
     // Texture t = new("Images/Boat/boat_00.png");
     Transform transform;
@@ -32,31 +32,27 @@ class BoatController : Component
 
         if(Keyboard.Down(Key.A))
         {
-            br.Angle -= 100f * (float)dt;
+            transform.Angle -= 100f * (float)dt;
         }
 
         if(Keyboard.Down(Key.D))
         {
-            br.Angle += 100f * (float)dt;
+            transform.Angle += 100f * (float)dt;
         }
 
         if(Keyboard.Down(Key.W))
         {
-            transform.Position += Helpers.LengthDir(mSpeed * dt, br.Angle);
+            transform.Position += Helpers.LengthDir(mSpeed * dt, transform.Angle);
 
             Random rand = new();
             if(rand.NextDouble() > 0.98)
-                br.v.Add(new Vector3(transform.Position + Helpers.LengthDir(10, br.Angle + 180 + ((rand.NextDouble() - 0.5) * 50)), 1));
+                br.v.Add(new Vector3(transform.Position + Helpers.LengthDir(10, transform.Angle + 180 + ((rand.NextDouble() - 0.5) * 50)), 1));
         }
 
-        // if(Mouse.Pressed(MB.Left))
-        // {
-        //     ParentScene.RegisterEntity(new Entity(ParentScene).Add(new CannonBallController(transform.Position, Angle + 75, 100f)));
-        //     ParentScene.RegisterEntity(new Entity(ParentScene).Add(new CannonBallController(transform.Position, Angle + 105, 100f)));
-
-        //     ParentScene.RegisterEntity(new Entity(ParentScene).Add(new CannonBallController(transform.Position, Angle + 255, 100f)));
-        //     ParentScene.RegisterEntity(new Entity(ParentScene).Add(new CannonBallController(transform.Position, Angle + 285, 100f)));
-        // }
+        if(Mouse.Pressed(MB.Left))
+        {
+            Get<BoatShooterController>().Shoot();
+        }
 
         if(transform.Position.X < -3200 || transform.Position.X > 3200 || transform.Position.Y < -3200 || transform.Position.Y > 3200)
         {
@@ -70,7 +66,7 @@ class BoatController : Component
             {
                 if(Helpers.PointInside(transform.Position, new Vector4(i.Key.X * 16 - main.Map[j].Item2.X, i.Key.Y * 16 - main.Map[j].Item2.Y, 16, 16)))
                 {
-                    transform.Position += Helpers.LengthDir(1, br.Angle + 180);
+                    transform.Position += Helpers.LengthDir(mSpeed * dt, transform.Angle + 180);
                 }
             }
         }

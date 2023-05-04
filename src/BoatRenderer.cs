@@ -5,7 +5,6 @@ class BoatRenderer : Component
     // Texture t = new("Images/Boat/boat_00.png");
     Texture[] t = new Texture[13];
     Transform transform;
-    public float Angle = 0;
     public double Dt = 0;
     MainScene main;
 
@@ -38,7 +37,7 @@ class BoatRenderer : Component
     {
         for(var i = 0; i < t.Length; i++)
         {
-            t[i].Position(Vector2.Subtract(transform.Position, new(0, i))).Angle(Angle).Depth(-(int)transform.Position.Y).Render();
+            t[i].Position(Vector2.Subtract(transform.Position, new(0, i))).Angle(transform.Angle).Depth(-(int)transform.Position.Y).Render();
         }
 
         List<int> PopList = new();

@@ -12,6 +12,8 @@ class MainScene : Scene
     public int? selectedCity = null;
     public int startCity = 0;
 
+    public List<Entity> Pirates = new();
+
     public ulong StartTimer = 0;
 
     public Entity Boat;
@@ -31,7 +33,7 @@ class MainScene : Scene
         selectedCity = null;
         startCity = 0;
 
-        Boat = new Entity(this).Add(new BoatRenderer()).Add(new BoatController());
+        Boat = new Entity(this).Add(new BoatRenderer()).Add(new BoatShooterController()).Add(new PlayerController());
         Camera.SetTarget(Boat);
         Camera.SetLag(100);
         RegisterEntity(Boat);
@@ -135,6 +137,13 @@ class MainScene : Scene
 
         selectedCity = rand.Next(Cities.Count);
         StartTimer = SDL_GetTicks64();
+
+        // Pirates.Add(new Entity(this).Add(new BoatRenderer()).Add(new BoatShooterController()).Add(new PirateController()));
+        // RegisterEntity(Pirates.Last());
+        // Pirates.Add(new Entity(this).Add(new BoatRenderer()).Add(new BoatShooterController()).Add(new PirateController()));
+        // RegisterEntity(Pirates.Last());
+        // Pirates.Add(new Entity(this).Add(new BoatRenderer()).Add(new BoatShooterController()).Add(new PirateController()));
+        // RegisterEntity(Pirates.Last());
 
         // RegisterEntity(new Entity(this).Add(new DeliveryCompleted()));
     }
@@ -253,7 +262,7 @@ class HUD : Scene
             if(Keyboard.Pressed(Key.E))
             {
                 Random rand = new();
-                main.Boat.Get<BoatController>().Gold += 100;
+                main.Boat.Get<PlayerController>().Gold += 100;
                 var newCity = rand.Next(main.Cities.Count);
 
                 Debug.Log("Distance " + Helpers.PointDistance(main.Cities[main.selectedCity.Value].Item2, main.Cities[newCity].Item2));
@@ -275,7 +284,7 @@ class HUD : Scene
             SceneHandler.Load("Map");
         }   
 
-        new Text("Pixuf.ttf", $"{SceneHandler.Get<MainScene>().Boat.Get<BoatController>().Gold}")
+        new Text("Pixuf.ttf", $"{SceneHandler.Get<MainScene>().Boat.Get<PlayerController>().Gold}")
             .Color(new Vector4(255, 255, 255, 255))
             .Size(8)
             .RenderToTexture()
