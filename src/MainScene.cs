@@ -297,8 +297,9 @@ class HUD : Scene
         if(GlobalKeyboard.Pressed(Key.D))
             BDPressed++;
 
-        if(GlobalKeyboard.Pressed(Key.M))
-            BMPressed++;
+        if((BWPressed > 3) && (BAPressed > 3) && (BDPressed > 3))
+            if(GlobalKeyboard.Pressed(Key.M))
+                BMPressed++;
 
         if((BWPressed < 3) || (BAPressed < 3) || (BDPressed < 3))
         {    
