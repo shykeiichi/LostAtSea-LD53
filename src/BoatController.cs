@@ -3,10 +3,8 @@ namespace LD53;
 class BoatController : Component
 {
     // Texture t = new("Images/Boat/boat_00.png");
-    Texture[] t = new Texture[13];
     Transform transform;
-    float Angle = 0;
-    double Dt = 0;
+    BoatRenderer br;
     public int Gold = 0;
     MainScene main;
 
@@ -15,13 +13,7 @@ class BoatController : Component
     public override void Awake()
     {
         transform = Get<Transform>();
-
-        for(var i = 0; i < t.Length; i++)
-        {
-            t[i] =  new($"Images/Boat/boat_{(i.ToString().Length > 1 ? i : "0" + i.ToString())}.png");
-            t[i].Center(Center.Middle);
-        }
-
+        br = Get<BoatRenderer>();
         main = SceneHandler.Get<MainScene>();
     }
 
@@ -36,27 +28,25 @@ class BoatController : Component
             Debug.Log(transform.Position);
         });
 
-        Dt = dt;
-
         float mSpeed = 70; // 70
 
         if(Keyboard.Down(Key.A))
         {
-            Angle -= 100f * (float)dt;
+            br.Angle -= 100f * (float)dt;
         }
 
         if(Keyboard.Down(Key.D))
         {
-            Angle += 100f * (float)dt;
+            br.Angle += 100f * (float)dt;
         }
 
         if(Keyboard.Down(Key.W))
         {
-            transform.Position += Helpers.LengthDir(mSpeed * dt, Angle);
+            transform.Position += Helpers.LengthDir(mSpeed * dt, br.Angle);
 
             Random rand = new();
             if(rand.NextDouble() > 0.98)
-                v.Add(new Vector3(transform.Position + Helpers.LengthDir(10, Angle + 180 + ((rand.NextDouble() - 0.5) * 50)), 1));
+                br.v.Add(new Vector3(transform.Position + Helpers.LengthDir(10, br.Angle + 180 + ((rand.NextDouble() - 0.5) * 50)), 1));
         }
 
         // if(Mouse.Pressed(MB.Left))
@@ -80,7 +70,7 @@ class BoatController : Component
             {
                 if(Helpers.PointInside(transform.Position, new Vector4(i.Key.X * 16 - main.Map[j].Item2.X, i.Key.Y * 16 - main.Map[j].Item2.Y, 16, 16)))
                 {
-                    transform.Position += Helpers.LengthDir(1, Angle + 180);
+                    transform.Position += Helpers.LengthDir(1, br.Angle + 180);
                 }
             }
         }
@@ -88,40 +78,6 @@ class BoatController : Component
 
     public override void Render()
     {
-        for(var i = 0; i < t.Length; i++)
-        {
-            t[i].Position(Vector2.Subtract(transform.Position, new(0, i))).Angle(Angle).Depth(-(int)transform.Position.Y).Render();
-        }
 
-        List<int> PopList = new();
-
-        for(var i = 0; i < v.Count; i++)
-        {
-            var circ = v[i];
-            new Circle(new(circ.X, circ.Y), 5)
-                .Color(new(255, 255, 255, 255))
-                .Fill(true)
-                .Depth((int)-(int)circ.Y - 32)
-                .Render();
-        
-            new Circle(new(circ.X, circ.Y), circ.Z)
-                .Color(new(140, 171, 161, 255))
-                .Fill(true)
-                .Depth(-(int)circ.Y - 32)
-                .Render();
-
-            v[i] = Vector3.Add(v[i], new(0, 0, 15 * (float)Dt));
-
-            if(v[i].Z > 5)
-                PopList.Add(i);
-        }
-
-        PopList.Sort();
-        PopList.Reverse();
-
-        foreach(var i in PopList)
-        {
-            v.RemoveAt(i);
-        }
     }
 }

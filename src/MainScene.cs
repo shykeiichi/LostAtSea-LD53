@@ -31,7 +31,7 @@ class MainScene : Scene
         selectedCity = null;
         startCity = 0;
 
-        Boat = new Entity(this).Add(new BoatController());
+        Boat = new Entity(this).Add(new BoatRenderer()).Add(new BoatController());
         Camera.SetTarget(Boat);
         Camera.SetLag(100);
         RegisterEntity(Boat);

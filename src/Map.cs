@@ -212,7 +212,7 @@ class Map : Scene
 
         Draw.Rectangle(new(0, 0, WindowSize.X, WindowSize.Y), new(235, 214, 190, 255));     
 
-        if(BScrollPressed > 12)
+        if(BScrollPressed > 11)
         {
             if(Mouse.Pressed(MB.Left))
             {
