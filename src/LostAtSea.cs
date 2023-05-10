@@ -11,7 +11,7 @@ class LostAtSea : Scene
         SetClearColor(255, 234, 210, 255);
     }
 
-    public override void Render()
+    public override void Update()
     {
         new Text("Pixuf.ttf", "Looks like you got lost at sea, Traveller")
             .Position(WindowSize / 2)

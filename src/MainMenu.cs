@@ -16,13 +16,8 @@ class MainMenu : Scene
 
     }
 
-    public override void Update(double dt)
+    public override void Update()
     {
-
-    }
-
-    public override void Render()
-    {   
         new Texture("Images/Logo.png")
             .Position(new(WindowSize.X / 2, 30))
             .Center(Center.Middle)

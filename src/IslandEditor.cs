@@ -37,12 +37,7 @@ class Editor : Scene
         SetClearColor(255, 251, 254, 255);
     }
 
-    public override void Update(double dt)
-    {
-
-    }
-
-    public override void Render()
+    public override void Update()
     {
         for(var w = 0; w < 16; w++)
         {
@@ -141,10 +136,10 @@ class EditorInspector : Scene
 
     public override void Awake()
     {
-        SetClearColor(UiColors.Background);
+        SetClearColor(UiStyles.Background);
     }
 
-    public override void Render()
+    public override void Update()
     {
         new UiBuilder(new Vector2(0, 0), Mouse.Position)
             .Container(

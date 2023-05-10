@@ -19,7 +19,7 @@ class PirateController : Component
 
     }
 
-    public override void Update(double dt)
+    public override void Update()
     {
         Entity player = main.Entities.First((e) => e.TryGet<PlayerController>(out PlayerController c));
         float dist = Helpers.PointDistance(
@@ -35,23 +35,23 @@ class PirateController : Component
             );
             if(main.Entities.Min((e) =>
                 Helpers.PointDistance(
-                    Helpers.LengthDir(30f * (float)dt, transform.Angle - angleDiff * (float)dt),
+                    Helpers.LengthDir(30f * DeltaTime, transform.Angle - angleDiff * DeltaTime),
                     e.Get<Transform>().Position
                 )
             ) < 50)
             {
-                transform.Angle -= (angleDiff * (float)dt) * 4;
+                transform.Angle -= (angleDiff * DeltaTime) * 4;
             }
             else
             {
-                transform.Angle -= angleDiff * (float)dt;
+                transform.Angle -= angleDiff * DeltaTime;
             }
             
 
             if(Math.Abs(angleDiff) < 15)
             {
                 Console.WriteLine(shoot);
-                shoot += 10f * (float)dt;
+                shoot += 10f * DeltaTime;
                 if(shoot > 30)
                 {
                     shoot = 0;
@@ -64,13 +64,8 @@ class PirateController : Component
             transform.Angle -= Helpers.AngleDifference(
                 Helpers.PointDirection(transform.Position, player.Get<Transform>().Position),
                 transform.Angle
-            ) * (float)dt;
-            transform.Position += Helpers.LengthDir(30f * (float)dt, transform.Angle);
+            ) * DeltaTime;
+            transform.Position += Helpers.LengthDir(30f * DeltaTime, transform.Angle);
         }
-    }
-
-    public override void Render()
-    {
-        
     }
 }

@@ -28,12 +28,7 @@ class BoatRenderer : Component
 
     }
 
-    public override void Update(double dt)
-    {
-        Dt = dt;
-    }
-
-    public override void Render()
+    public override void Update()
     {
         for(var i = 0; i < t.Length; i++)
         {
@@ -57,7 +52,7 @@ class BoatRenderer : Component
                 .Depth(-(int)circ.Y - 32)
                 .Render();
 
-            v[i] = Vector3.Add(v[i], new(0, 0, 15 * (float)Dt));
+            v[i] = Vector3.Add(v[i], new(0, 0, 15 * DeltaTime));
 
             if(v[i].Z > 5)
                 PopList.Add(i);

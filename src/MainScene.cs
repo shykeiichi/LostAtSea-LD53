@@ -153,13 +153,10 @@ class MainScene : Scene
         
     }
 
-    public override void Update(double dt)
+    public override void Update()
     {
         rectAngle += 10 * Game.GetDeltaTime();
-    }
 
-    public override void Render()
-    {
         for(var j = 0; j < Map.Count; j++)
         {
             foreach(var i in Islands[Map[j].Item1])
@@ -243,7 +240,7 @@ class HUD : Scene
         SetCaptureMouse(false);
     }
 
-    public override void Render()
+    public override void Update()
     {
         if(Helpers.PointDistance(main.Boat.Get<Transform>().Position, main.Cities[main.selectedCity.Value].Item2) < 50)
         {

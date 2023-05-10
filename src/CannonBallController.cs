@@ -22,13 +22,10 @@ class CannonBallController : Component
         transform.Position = pos;
     }
 
-    public override void Update(double dt)
+    public override void Update()
     {
-        transform.Position += Helpers.LengthDir(speed * (float)dt, angle);
-    }
+        transform.Position += Helpers.LengthDir(speed * DeltaTime, angle);
 
-    public override void Render()
-    {
         t.Position(transform.Position).Depth(-(int)transform.Position.Y - 8).Render();
     }
 }

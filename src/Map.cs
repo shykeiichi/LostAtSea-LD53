@@ -38,7 +38,7 @@ class Map : Scene
 
     }
 
-    public override void Update(double dt)
+    public override void Update()
     {
         if(Mouse.Pressed(MB.Left))
         {
@@ -59,20 +59,20 @@ class Map : Scene
 
         if(Keyboard.Down(Key.W))
         {
-            MapOffset.Y -= 400f * (float)dt;
+            MapOffset.Y -= 400f * DeltaTime;
         }
         if(Keyboard.Down(Key.S))
         {
-            MapOffset.Y += 400f * (float)dt;
+            MapOffset.Y += 400f * DeltaTime;
         }
 
         if(Keyboard.Down(Key.A))
         {
-            MapOffset.X -= 400f * (float)dt;
+            MapOffset.X -= 400f * DeltaTime;
         }
         if(Keyboard.Down(Key.D))
         {
-            MapOffset.X += 400f * (float)dt;
+            MapOffset.X += 400f * DeltaTime;
         }
         
         if(Keyboard.Pressed(Key.M))
@@ -90,10 +90,7 @@ class Map : Scene
             // SceneHandler.Load("Main");
             SceneHandler.Unload("Map");
         }
-    }
 
-    public override void Render()
-    {   
         // LD.DrawSmallFont(new(0, 0), "asd");
 
         // foreach(var i in main.Map)

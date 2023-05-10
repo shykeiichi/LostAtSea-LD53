@@ -11,7 +11,7 @@ public class DeliveryCompleted : Component
         Spawned = SDL_GetTicks64();
     }
 
-    public override void Update(double dt)
+    public override void Update()
     {
         transform.Position = ParentScene.WindowSize / 2;
 
@@ -19,10 +19,7 @@ public class DeliveryCompleted : Component
         {
             ParentScene.RemoveEntity(ParentEntity);
         }
-    }
 
-    public override void Render()
-    {
         new Texture("Images/DeliveryCompleted.png")
             .Center(Center.Middle)
             .Position(transform.Position + ParentScene.Camera.Offset)

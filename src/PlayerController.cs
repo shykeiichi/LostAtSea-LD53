@@ -22,7 +22,7 @@ class PlayerController : Component
 
     }
 
-    public override void Update(double dt)
+    public override void Update()
     {
         Debug.RegisterCommand("getpos", (args) => {
             Debug.Log(transform.Position);
@@ -32,17 +32,17 @@ class PlayerController : Component
 
         if(Keyboard.Down(Key.A))
         {
-            transform.Angle -= 100f * (float)dt;
+            transform.Angle -= 100f * DeltaTime;
         }
 
         if(Keyboard.Down(Key.D))
         {
-            transform.Angle += 100f * (float)dt;
+            transform.Angle += 100f * DeltaTime;
         }
 
         if(Keyboard.Down(Key.W))
         {
-            transform.Position += Helpers.LengthDir(mSpeed * dt, transform.Angle);
+            transform.Position += Helpers.LengthDir(mSpeed * DeltaTime, transform.Angle);
 
             Random rand = new();
             if(rand.NextDouble() > 0.98)
@@ -66,14 +66,9 @@ class PlayerController : Component
             {
                 if(Helpers.PointInside(transform.Position, new Vector4(i.Key.X * 16 - main.Map[j].Item2.X, i.Key.Y * 16 - main.Map[j].Item2.Y, 16, 16)))
                 {
-                    transform.Position += Helpers.LengthDir(mSpeed * dt, transform.Angle + 180);
+                    transform.Position += Helpers.LengthDir(mSpeed * DeltaTime, transform.Angle + 180);
                 }
             }
         }
-    }
-
-    public override void Render()
-    {
-
     }
 }
