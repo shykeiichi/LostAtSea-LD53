@@ -209,7 +209,7 @@ class Map : Scene
 
         Draw.Rectangle(new(0, 0, WindowSize.X, WindowSize.Y), new(235, 214, 190, 255));     
 
-        if(BScrollPressed > 11)
+        if(BScrollPressed > 5)
         {
             if(Mouse.Pressed(MB.Left))
             {
@@ -222,7 +222,7 @@ class Map : Scene
             BScrollPressed++;
         }
 
-        if(BScrollPressed < 12)
+        if(BScrollPressed < 5)
         {
             BScroll.Position(new(WindowSize.X / 2, WindowSize.Y - 3)).Center(Center.BottomMiddle).Depth(30000).Render();
 
@@ -239,7 +239,7 @@ class Map : Scene
 
             Draw.Box(Vector4.Add(rect, new(-2, -2, 3, 3)), new(235, 214, 190, 255), 29999);     
         }
-        else if(BPanPressed < 4)
+        else if(BPanPressed < 1)
         {
             if(!Mouse.Down(MB.Left))
                 BPanOn.Position(new(WindowSize.X / 2, WindowSize.Y - 3)).Center(Center.BottomMiddle).Depth(30000).Render();
