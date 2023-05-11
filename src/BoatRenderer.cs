@@ -32,7 +32,25 @@ class BoatRenderer : Component
     {
         for(var i = 0; i < t.Length; i++)
         {
-            t[i].Position(Vector2.Subtract(transform.Position, new(0, i))).Angle(transform.Angle).Depth(-(int)transform.Position.Y).Render();
+            if(i < t.Length - 6 || Keyboard.Down(Key.W))
+            {
+                t[i].Position(Vector2.Subtract(transform.Position, new(0, i))).Angle(transform.Angle).Depth(-(int)transform.Position.Y).Render();
+            } else 
+            {
+                t[i].Position(
+                    Vector2.Add(
+                        Vector2.Subtract(
+                            transform.Position, 
+                            new(0, i)
+                        ),
+                        Helpers.LengthDir((MathF.Sin((SDL_GetTicks64() / 200) + (ulong)(i)) - 0.5) * 1, 45)
+                        
+                    )
+                )
+                .Angle(transform.Angle)
+                .Depth(-(int)transform.Position.Y)
+                .Render();
+            }
         }
 
         List<int> PopList = new();
