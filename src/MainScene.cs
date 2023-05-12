@@ -2,8 +2,6 @@ namespace LD53;
 
 class MainScene : Scene
 {
-    double rectAngle = 0f;
-
     public List<Dictionary<Vector2, Tile>> Islands = new();
     public List<(int, Vector2)> Map = new();
     public Dictionary<string, LoadTile> Tiles = new();
@@ -155,8 +153,6 @@ class MainScene : Scene
 
     public override void Update()
     {
-        rectAngle += 10 * Game.GetDeltaTime();
-
         for(var j = 0; j < Map.Count; j++)
         {
             foreach(var i in Islands[Map[j].Item1])
