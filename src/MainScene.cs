@@ -83,7 +83,7 @@ class MainScene : Scene
             bool next = false;
             while(!next)
             {
-                Vector2 pos = new(rand.Next(-3000, 3000), rand.Next(-3000, 3000));
+                Vector2 pos = new(rand.Next(-2500, 2500), rand.Next(-2500, 2500));
                 
                 float closest = 999999999999999;
 
