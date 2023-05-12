@@ -24,6 +24,7 @@ class Editor : Scene
 {
     EditorInspector inspector;
     
+    
     public Dictionary<Vector2, Tile> Tilemap = new();
 
     public Editor(int width, int height, string id) : base(width, height, id)
@@ -130,6 +131,8 @@ class EditorInspector : Scene
     public string SavePath = "";
     public string LoadPath = "";
 
+    float yOffset = 0;
+
     public EditorInspector(int width, int height, string id) : base(width, height, id)
     {
     }
@@ -141,7 +144,17 @@ class EditorInspector : Scene
 
     public override void Update()
     {
-        new UiBuilder(new Vector2(0, 0), Mouse.Position)
+        if(MouseInsideScene) 
+        {
+            if(Mouse.Pressed(MB.ScrollDown)) {
+                yOffset -= 10;
+            }
+            if(Mouse.Pressed(MB.ScrollUp)) {
+                yOffset += 10;
+            }
+        }
+
+        new UiBuilder(new Vector2(0, yOffset), Mouse.Position)
             .Container(
                 "Tiles",
                 new UiBuilder(new Vector2(0, 0), Mouse.Position)
@@ -321,7 +334,21 @@ class EditorInspector : Scene
                     })
                     .Build()
             )
-            .Render();
+            .Render(out int uiHeight);
+
+        if(MouseInsideScene) 
+        {
+            if(uiHeight > WindowSize.Y) {
+                if(-yOffset < 0) {
+                    yOffset = 0;
+                }
+                if(-yOffset > uiHeight - WindowSize.Y + 50) {
+                    yOffset = -uiHeight + WindowSize.Y - 50;
+                }
+            } else {
+                yOffset = 0;
+            }
+        }
     }
 }
 

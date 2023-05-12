@@ -146,6 +146,8 @@ class MainScene : Scene
         // RegisterEntity(Pirates.Last());
 
         // RegisterEntity(new Entity(this).Add(new DeliveryCompleted()));
+
+        RegisterEntity(new Entity(this).Add(new DeliveryCompleted()));
     }
 
     public override void Sleep()
