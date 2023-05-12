@@ -4,6 +4,7 @@ class CannonBallController : Component
 {
     float angle, speed;
     Vector2 pos;
+    ulong spawned;
 
     Transform transform;
     
@@ -20,6 +21,7 @@ class CannonBallController : Component
     {
         transform = Get<Transform>();
         transform.Position = pos;
+        spawned = SDL_GetTicks64();
     }
 
     public override void Update()
@@ -27,6 +29,11 @@ class CannonBallController : Component
         transform.Position += Helpers.LengthDir(speed * DeltaTime, angle);
 
         t.Position(transform.Position).Depth(-(int)transform.Position.Y - 8).Render();
+
+        if(SDL_GetTicks64() - spawned > 10000)
+        {
+            ParentScene.RemoveEntity(ParentEntity);
+        }
     }
 }
 
