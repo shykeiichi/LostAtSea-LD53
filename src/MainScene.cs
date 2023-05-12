@@ -157,7 +157,7 @@ class MainScene : Scene
         {
             foreach(var i in Islands[Map[j].Item1])
             {
-                if(Helpers.PointDistance(new(i.Key.X * 16 - Map[j].Item2.X, i.Key.Y * 16 - Map[j].Item2.Y), Camera.Offset) < WindowSize.X + 20) 
+                if(Helpers.PointDistance(new(i.Key.X * 16 - Map[j].Item2.X, i.Key.Y * 16 - Map[j].Item2.Y), Camera.Offset) < WindowSize.X + 64) 
                 {
                     Tiles[i.Value.TileID].tex
                         .Position(i.Key.X * 16 - Map[j].Item2.X, i.Key.Y * 16 - Map[j].Item2.Y)
