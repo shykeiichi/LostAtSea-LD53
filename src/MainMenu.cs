@@ -27,11 +27,9 @@ class MainMenu : Scene
         LD.DrawButton(new(WindowSize.X / 2 - (4 * 2 + 2), 60), "Play", Mouse.Position, () => {
             SceneHandler.Unload("MainMenu");
             SceneHandler.Get("Main").Entities.Clear();
-            SceneHandler.Get("Main").AwakeCall();
             SceneHandler.Load("Main");
 
             SceneHandler.Get("HUD").Entities.Clear();
-            SceneHandler.Get("HUD").AwakeCall();
             SceneHandler.Load("HUD");
 
             SceneHandler.Get<InspectorScene>().SelectedScene = "Main";
