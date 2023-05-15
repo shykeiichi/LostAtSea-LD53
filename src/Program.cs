@@ -27,6 +27,10 @@ class Program
             .SetRelativeWindowSize(0, 0, 1f, 1f)
         );
 
+        SceneHandler.Register(new PauseMenu(280, 157, "PauseMenu")
+            .SetRelativeWindowSize(0, 0, 1f, 1f)
+        );
+
         SceneHandler.Register(new EditorInspector(280, 157, "EditorInspector")
             .SetRelativeWindowSize(0f, 0, 0.2f, 1)
             .SetAlwaysAtBack(true)

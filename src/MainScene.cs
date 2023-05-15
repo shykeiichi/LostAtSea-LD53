@@ -18,6 +18,7 @@ class MainScene : Scene
 
     public MainScene(int width, int height, string id) : base(width, height, id)
     {
+
     }
 
     public override void Awake()
@@ -148,11 +149,16 @@ class MainScene : Scene
 
     public override void Sleep()
     {
-        
+
     }
 
     public override void Update()
     {
+        if(Keyboard.Down(Key.ESCAPE))
+        {
+            SceneHandler.Load("PauseMenu");   
+        }
+
         for(var j = 0; j < Map.Count; j++)
         {
             foreach(var i in Islands[Map[j].Item1])

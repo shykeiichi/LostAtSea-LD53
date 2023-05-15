@@ -28,6 +28,7 @@ class MainMenu : Scene
             SceneHandler.Unload("MainMenu");
             SceneHandler.Get("Main").Entities.Clear();
             SceneHandler.Load("Main");
+            SceneHandler.Get("Main").AwakeCall();
 
             SceneHandler.Get("HUD").Entities.Clear();
             SceneHandler.Load("HUD");
